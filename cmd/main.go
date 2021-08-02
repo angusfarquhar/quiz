@@ -30,7 +30,6 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println("Successfully Opened CSV file")
-	fmt.Println(csvFile)
 	// defer csv.Close()
 
 	// get contents of CSV
@@ -44,15 +43,22 @@ func main() {
 	problems := []quizData{}
 	for i, line := range csvLines {
 		problems = append(problems, quizData{line[0], line[1]})
-		fmt.Println(i, problems[i].question)
+		fmt.Println(i, problems[i].question, problems[i].answer)
 		// problems[i].answer = line[1]
 		// fmt.Println(line[1])
 	}
 
-	input := myScanner()
-	if input == problems[0].answer {
-		fmt.Println("YES")
+	for _, problem := range problems {
+		fmt.Println("Question: ", problem.question)
+		input := myScanner()
+		if problem.answer == input {
+			fmt.Println("Correct!")
+			continue
+		} else {
+			fmt.Println("Incorrect!")
+		}
 	}
+
 	// fmt.Scanf(x[0], input)
 	// if input == x[1] {
 	// 	fmt.Println("Correct!")
