@@ -7,9 +7,15 @@ import (
 	"os"
 )
 
-type quizData struct {
+type QuizData struct {
 	question string
 	answer   string
+}
+
+type Score struct {
+	amount    int
+	correct   int
+	incorrect int
 }
 
 func myScanner() string {
@@ -24,43 +30,42 @@ func myScanner() string {
 
 func main() {
 	// open CSV
-	csvFile, err := os.Open("../problems.csv")
+	f, err := os.Open("../problems.csv")
 	fmt.Println("Opening CSV File...")
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println("Successfully Opened CSV file")
-	fmt.Println(csvFile)
 	// defer csv.Close()
 
 	// get contents of CSV
-	csvLines, err := csv.NewReader(csvFile).ReadAll()
+	csvLines, err := csv.NewReader(f).ReadAll()
 	if err != nil {
 		fmt.Println(err)
 	}
-	// fmt.Printf("Question %v: %v= ?", 1, csvLines[0])
-	// input := myScanner()
-	// fmt.Println(input)
-	problems := []quizData{}
+	problems := []QuizData{}
 	for i, line := range csvLines {
-		problems = append(problems, quizData{line[0], line[1]})
-		fmt.Println(i, problems[i].question)
-		// problems[i].answer = line[1]
-		// fmt.Println(line[1])
+		problems = append(problems, QuizData{line[0], line[1]})
+		fmt.Println(i, problems[i].question, problems[i].answer)
 	}
 
-	input := myScanner()
-	if input == problems[0].answer {
-		fmt.Println("YES")
+	quizScore := Score{0, 0, 0}
+
+	for _, problem := range problems {
+		fmt.Println("Question: ", problem.question)
+		quizScore.amount++
+		input := myScanner()
+		if problem.answer == input {
+			fmt.Println("Correct!")
+			quizScore.correct++
+			continue
+		} else {
+			fmt.Println("Incorrect!")
+			quizScore.incorrect++
+		}
 	}
-	// fmt.Scanf(x[0], input)
-	// if input == x[1] {
-	// 	fmt.Println("Correct!")
-	// }
 
-	// print out questions
-
-	// CSV to struct array
-	// Get Stdin input and compare to each Answer
+	fmt.Println("End Quiz!")
+	fmt.Println("Final Score:", quizScore.correct, "/", quizScore.amount)
 
 }
